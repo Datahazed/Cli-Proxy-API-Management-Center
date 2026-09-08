@@ -1,0 +1,47 @@
+# Keep origin/main identical to router-for-me/Cli-Proxy-API-Management-Center main.
+# Humans cannot update main (repo ruleset). This job uses the write deploy key
+# in LAB_MAIN_SYNC_SSH. Lives on the default branch so schedule fires.
+name: lab — sync main from upstream
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: lab-sync-upstream-main
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main over SSH
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          ssh-key: ${{ secrets.LAB_MAIN_SYNC_SSH }}
+
+      - name: Reset main to upstream/main
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/router-for-me/Cli-Proxy-API-Management-Center.git
+          git fetch --prune upstream main
+          git fetch origin main
+          UPSTREAM=$(git rev-parse upstream/main)
+          CURRENT=$(git rev-parse HEAD)
+          echo "origin/main=$CURRENT"
+          echo "upstream/main=$UPSTREAM"
+          if [ "$UPSTREAM" = "$CURRENT" ]; then
+            echo "main already matches upstream"
+            exit 0
+          fi
+          git reset --hard "$UPSTREAM"
+          git push --force origin main

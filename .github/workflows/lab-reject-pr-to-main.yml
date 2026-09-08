@@ -1,0 +1,15 @@
+# Fail any PR that targets main. Combined with the "main tracks upstream
+# CPAMC" ruleset, this stops overlay work being merged into main again.
+name: lab — do not target main
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  reject:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain
+        run: |
+          echo "::error::Do not open or merge PRs into main. main is a fast-forward copy of upstream CPAMC (router-for-me). Target lab-opencode-go-quota instead. See LAB.md."
+          exit 1

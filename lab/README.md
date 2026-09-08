@@ -5,6 +5,8 @@ on `lab-opencode-go-quota` so `main` can fast-forward from upstream.
 
 **Day-to-day (rebuild, rebase, bump CPA, plugin): [LAB.md](../LAB.md).**
 
+PRs go into `lab-opencode-go-quota`. `main` is ruleset-locked to upstream.
+
 | Path | What |
 |---|---|
 | `management.html` | Built single-file panel. Mini compose bind-mounts this. |

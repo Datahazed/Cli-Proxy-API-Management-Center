@@ -1,6 +1,7 @@
 #!/bin/sh
-# Fast-forward origin/main from upstream CPAMC, then rebase the lab overlay
-# branch. Does not force-push; that is left to the operator after tests.
+# Rebase the lab overlay onto upstream CPAMC main.
+# Does not push origin/main — that branch is ruleset-locked and kept
+# identical to upstream by .github/workflows/lab-sync-upstream-main.yml.
 set -eu
 root=$(CDPATH= cd -- "$(dirname "$0")/../.." && pwd)
 branch="${1:-lab-opencode-go-quota}"
@@ -11,13 +12,11 @@ if ! git remote get-url upstream >/dev/null 2>&1; then
 fi
 git fetch upstream
 git fetch origin
-git checkout main
-git merge --ff-only upstream/main
-git push origin main
 git checkout "$branch"
-git rebase main
+git rebase upstream/main
 echo
 echo "Rebase stopped at $(git rev-parse --short HEAD) on $branch."
+echo "origin/main is updated by GitHub Actions, not this script."
 echo "If the rebase finished cleanly:"
 echo "  bun test && bun run type-check"
 echo "  git push --force-with-lease origin $branch"

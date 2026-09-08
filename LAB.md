@@ -22,15 +22,24 @@ track upstream.
 
 | Branch | What |
 |---|---|
-| `main` | Fast-forward only from `upstream/main`. No lab overlay. |
-| `lab-opencode-go-quota` | **Working branch.** OpenCode Go Usage adapter + `lab/` tooling. Default on GitHub. |
+| `main` | Exact copy of `upstream/main`. No lab overlay. Humans cannot push or merge here. |
+| `lab-opencode-go-quota` | **Working branch.** All lab work lands here (direct push or PRs *into this branch*). GitHub default. |
 
-Do not merge `lab-opencode-go-quota` into `main`. Rebase it onto `main`
-when upstream moves. GitHub default is this lab branch so `git clone`
-gets `lab/` without touching `main`.
+Do not merge `lab-opencode-go-quota` into `main`. Open feature PRs
+against `lab-opencode-go-quota`, not `main`. Rebase this branch onto
+`upstream/main` when upstream moves.
 
-PR #1 was merged into `main` by accident and then undone: `main` was
-reset to `upstream/main`. Leave `main` as a fast-forward of upstream.
+GitHub enforces that:
+
+- Ruleset **main tracks upstream CPAMC** blocks updates to `main`
+  except the write deploy key used by Actions.
+- `.github/workflows/lab-reject-pr-to-main.yml` fails any PR that
+  targets `main`.
+- `.github/workflows/lab-sync-upstream-main.yml` resets `main` to
+  `upstream/main` daily, on push, and via workflow_dispatch.
+
+PR #1 was merged into `main` by accident and then undone. The ruleset
+is there so that cannot stick again.
 
 ```text
 git clone --branch lab-opencode-go-quota \
@@ -118,13 +127,13 @@ API. Keys land in the gitignored runtime config, not here.
 
 ### Pull upstream Management Center features
 
-When router-for-me ships panel UI you want:
+When router-for-me ships panel UI you want. The script rebases this
+branch onto `upstream/main`. It does not touch `origin/main`.
 
 ```text
 cd ~/projects/cli-proxy-management-center
 ./lab/scripts/rebase-upstream.sh
 # fix conflicts if any (usually src/features/quota/* and i18n)
-# the script does not force-push
 git push --force-with-lease origin lab-opencode-go-quota
 ./lab/scripts/rebuild-panel.sh
 git add lab/management.html lab/pin.json
@@ -183,7 +192,8 @@ card shows remaining as `100 - percent`. `rate-limited` is 100% used.
 ## Do not
 
 - Open a Usage-provider PR against upstream CPAMC (already rejected).
-- Merge `lab-opencode-go-quota` into `main`.
+- Merge `lab-opencode-go-quota` into `main` (GitHub will reject it).
+- Open PRs that target `main`. Target `lab-opencode-go-quota`.
 - Turn panel auto-update back on in the live CLI Proxy config.
 - Commit `dist/`, `lab/plugin/dist/`, `.so` files, or OpenCode Go keys.
 - Put this on `gateway.lab.datahaze.co.uk` or publish host port 8317.
