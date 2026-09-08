@@ -26,10 +26,11 @@ track upstream.
 | `lab-opencode-go-quota` | **Working branch.** OpenCode Go Usage adapter + `lab/` tooling. Default on GitHub. |
 
 Do not merge `lab-opencode-go-quota` into `main`. Rebase it onto `main`
-when upstream moves.
+when upstream moves. GitHub default is this lab branch so `git clone`
+gets `lab/` without touching `main`.
 
-Reviewable PR (keep open, do not merge):
-https://github.com/Datahazed/Cli-Proxy-API-Management-Center/pull/1
+PR #1 was merged into `main` by accident and then undone: `main` was
+reset to `upstream/main`. Leave `main` as a fast-forward of upstream.
 
 ```text
 git clone --branch lab-opencode-go-quota \
