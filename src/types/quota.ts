@@ -397,3 +397,20 @@ export interface XaiQuotaState {
   error?: string;
   errorStatus?: number;
 }
+
+export interface OpencodeGoQuotaWindow {
+  id: string;
+  labelKey?: string;
+  usedPercent: number | null;
+  resetAtMs?: number | null;
+  /** 5 for rolling, 168 for weekly; monthly is anniversary-based so null. */
+  periodHours?: number | null;
+  status?: string;
+}
+
+export interface OpencodeGoQuotaState {
+  status: 'idle' | 'loading' | 'success' | 'error';
+  windows: OpencodeGoQuotaWindow[];
+  error?: string;
+  errorStatus?: number;
+}

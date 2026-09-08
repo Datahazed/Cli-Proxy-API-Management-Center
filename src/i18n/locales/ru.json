@@ -294,6 +294,8 @@
     "filter_codex": "Codex",
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
+    "filter_opencode-go": "OpenCode Go",
+    "filter_opencode": "OpenCode Go",
     "filter_iflow": "iFlow",
     "filter_vertex": "Vertex",
     "filter_empty": "Пусто",
@@ -487,6 +489,20 @@
     "limit_window": "Лимит {{duration}}",
     "limit_index": "Лимит #{{index}}",
     "reset_hint": "сброс через {{hint}}"
+  },
+  "opencode_go_quota": {
+    "title": "Квота OpenCode Go",
+    "empty_title": "Нет учётных данных OpenCode Go",
+    "empty_desc": "Вставьте API-ключ на странице OpenCode Go Keys, чтобы видеть расход за 5 часов, неделю и месяц.",
+    "idle": "Нажмите, чтобы обновить квоту",
+    "loading": "Загрузка квоты...",
+    "load_failed": "Не удалось загрузить квоту: {{message}}",
+    "missing_key_id": "В файле нет OpenCode Go key id",
+    "empty_data": "Нет данных о квоте",
+    "refresh_button": "Обновить квоту",
+    "window_rolling": "5 часов",
+    "window_weekly": "Неделя",
+    "window_monthly": "Месяц"
   },
   "xai_quota": {
     "title": "Квота Grok",

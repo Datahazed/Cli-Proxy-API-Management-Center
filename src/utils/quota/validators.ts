@@ -31,6 +31,11 @@ export function isXaiFile(file: AuthFileItem): boolean {
   return resolveAuthProvider(file) === 'xai';
 }
 
+export function isOpencodeGoFile(file: AuthFileItem): boolean {
+  const provider = resolveAuthProvider(file);
+  return provider === 'opencode-go' || provider === 'opencode';
+}
+
 export function isDisabledAuthFile(file: AuthFileItem): boolean {
   const raw = (file as { disabled?: unknown }).disabled;
   if (typeof raw === 'boolean') return raw;

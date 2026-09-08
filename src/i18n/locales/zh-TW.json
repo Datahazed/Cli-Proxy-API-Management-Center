@@ -295,6 +295,8 @@
     "filter_codex": "Codex",
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
+    "filter_opencode-go": "OpenCode Go",
+    "filter_opencode": "OpenCode Go",
     "filter_iflow": "iFlow",
     "filter_vertex": "Vertex",
     "filter_empty": "空檔案",
@@ -488,6 +490,20 @@
     "limit_window": "{{duration}} 限額",
     "limit_index": "限額 #{{index}}",
     "reset_hint": "{{hint}} 後重置"
+  },
+  "opencode_go_quota": {
+    "title": "OpenCode Go 配額",
+    "empty_title": "沒有 OpenCode Go 憑證",
+    "empty_desc": "在 OpenCode Go Keys 頁面貼上 API key 後，即可在此查看 5 小時、每週和每月用量。",
+    "idle": "點擊重新整理配額",
+    "loading": "正在載入配額...",
+    "load_failed": "載入配額失敗：{{message}}",
+    "missing_key_id": "憑證缺少 OpenCode Go key id",
+    "empty_data": "暫無配額資料",
+    "refresh_button": "重新整理配額",
+    "window_rolling": "5 小時",
+    "window_weekly": "每週",
+    "window_monthly": "每月"
   },
   "xai_quota": {
     "title": "Grok 配額",

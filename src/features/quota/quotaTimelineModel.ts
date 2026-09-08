@@ -466,6 +466,28 @@ export function buildTimelineLane(input: TimelineLaneInput): TimelineLane {
     };
   }
 
+  if (provider === 'opencode-go') {
+    const windows = ((quota as { windows?: WindowLike[] }).windows ?? []).filter(
+      (window) => typeof window.resetAtMs === 'number'
+    );
+    const chosen = pickLaneWindow(windows, maxPeriodHours);
+    if (!chosen) return empty;
+
+    return {
+      ...empty,
+      anchorMs: chosen.resetAtMs ?? null,
+      periodHours: chosen.periodHours ?? null,
+      remaining:
+        typeof chosen.usedPercent === 'number' ? clampPercent(100 - chosen.usedPercent) : null,
+      limits: windows
+        .filter((window) => typeof window.usedPercent === 'number')
+        .map((window) => ({
+          label: window.label ?? window.id ?? '',
+          remaining: clampPercent(100 - (window.usedPercent as number)),
+        })),
+    };
+  }
+
   if (provider === 'kimi') {
     const rows = ((quota as { rows?: KimiRowLike[] }).rows ?? []).filter(
       (row) => typeof row.resetAtMs === 'number'

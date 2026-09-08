@@ -295,6 +295,8 @@
     "filter_codex": "Codex",
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
+    "filter_opencode-go": "OpenCode Go",
+    "filter_opencode": "OpenCode Go",
     "filter_iflow": "iFlow",
     "filter_vertex": "Vertex",
     "filter_empty": "Empty",
@@ -488,6 +490,20 @@
     "limit_window": "{{duration}} limit",
     "limit_index": "Limit #{{index}}",
     "reset_hint": "resets in {{hint}}"
+  },
+  "opencode_go_quota": {
+    "title": "OpenCode Go Quota",
+    "empty_title": "No OpenCode Go credentials",
+    "empty_desc": "Paste a Go API key on the OpenCode Go Keys page to see 5-hour, weekly, and monthly usage here.",
+    "idle": "Click to refresh quota",
+    "loading": "Loading quota...",
+    "load_failed": "Failed to load quota: {{message}}",
+    "missing_key_id": "Auth file missing OpenCode Go key id",
+    "empty_data": "No quota data available",
+    "refresh_button": "Refresh Quota",
+    "window_rolling": "5-hour",
+    "window_weekly": "Weekly",
+    "window_monthly": "Monthly"
   },
   "xai_quota": {
     "title": "Grok Quota",
