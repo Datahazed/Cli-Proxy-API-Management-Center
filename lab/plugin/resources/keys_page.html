@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenCode Go Keys</title>
+<style>
+:root {
+  --bg-primary: #f0eee8;
+  --bg-secondary: #faf9f5;
+  --bg-tertiary: #e9e6df;
+  --text-primary: #2d2a26;
+  --text-secondary: #6d6760;
+  --text-tertiary: #a29c95;
+  --border-color: #e3e1db;
+  --primary-color: #8b8680;
+  --primary-hover: #7f7a74;
+  --success-color: #188038;
+  --warning-color: #b06000;
+  --error-color: #b3261e;
+  --radius-md: 8px;
+  --shadow: 0 1px 3px rgba(45, 42, 38, .12);
+}
+[data-theme="white"] {
+  --bg-primary: #f0eee8;
+  --bg-secondary: #faf9f5;
+  --bg-tertiary: #e9e6df;
+  --text-primary: #2d2a26;
+  --text-secondary: #6d6760;
+  --text-tertiary: #a29c95;
+  --border-color: #e3e1db;
+}
+[data-theme="dark"] {
+  --bg-primary: #1d1b18;
+  --bg-secondary: #151412;
+  --bg-tertiary: #262320;
+  --text-primary: #f0eee8;
+  --text-secondary: #b8b1a8;
+  --text-tertiary: #8d867e;
+  --border-color: #3c3833;
+  --primary-color: #8f8981;
+  --primary-hover: #a29b92;
+  --shadow: 0 1px 3px rgba(0, 0, 0, .35);
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body { margin: 0; padding: 32px; color: var(--text-primary); background: var(--bg-secondary); font: 14px/1.45 system-ui, sans-serif; }
+.keys-page { max-width: 720px; margin: 0 auto; }
+.keys-header { margin-bottom: 24px; }
+.keys-title { margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; }
+.keys-description { margin: 8px 0 0; color: var(--text-secondary); }
+.keys-card { padding: 20px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-primary); box-shadow: var(--shadow); }
+.keys-form { display: flex; gap: 10px; align-items: stretch; }
+.keys-input { flex: 1; min-width: 0; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); background: var(--bg-secondary); font: inherit; }
+.keys-input:focus { outline: 2px solid var(--primary-color); outline-offset: 1px; }
+.keys-add, .keys-remove { border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 14px; color: var(--text-primary); background: var(--bg-tertiary); font: inherit; font-size: 12px; cursor: pointer; }
+.keys-add:hover, .keys-remove:hover { border-color: var(--primary-color); background: var(--bg-primary); }
+.keys-add:disabled, .keys-remove:disabled { cursor: not-allowed; opacity: .6; }
+.keys-status { min-height: 1.45em; margin: 12px 0 0; }
+.keys-error { color: var(--error-color); }
+.keys-muted { color: var(--text-secondary); }
+.keys-list { list-style: none; margin: 18px 0 0; padding: 0; }
+.keys-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border-color); }
+.keys-mask { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+@media (max-width: 768px) {
+  body { padding: 20px 16px; }
+  .keys-form { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="keys-page">
+  <header class="keys-header">
+    <h1 class="keys-title">OpenCode Go Keys</h1>
+    <p class="keys-description">Paste an OpenCode Go API key to add it to the hub pool. Each key is one quota. Clients keep using the lab client key.</p>
+  </header>
+  <main id="app"><p class="keys-muted">Loading keys...</p></main>
+</div>
+<script>
+(() => {
+  try {
+    const parentDocument = window.parent && window.parent !== window ? window.parent.document : null;
+    const parentRoot = parentDocument && parentDocument.documentElement;
+    const syncTheme = () => {
+      if (!parentRoot) return;
+      const theme = parentRoot.getAttribute("data-theme");
+      if (theme === "white" || theme === "dark") document.documentElement.setAttribute("data-theme", theme);
+      else document.documentElement.removeAttribute("data-theme");
+      const secondary = getComputedStyle(parentRoot).getPropertyValue("--bg-secondary").trim();
+      if (secondary) document.documentElement.style.setProperty("--bg-secondary", secondary);
+      document.body.style.backgroundColor = secondary || "var(--bg-secondary)";
+      if (window.frameElement) {
+        window.frameElement.style.backgroundColor = secondary || "transparent";
+        if (window.frameElement.parentElement) window.frameElement.parentElement.style.backgroundColor = secondary || "transparent";
+      }
+    };
+    syncTheme();
+    if (parentRoot) new MutationObserver(syncTheme).observe(parentRoot, {attributes: true, attributeFilter: ["data-theme"]});
+  } catch (_) {}
+})();
+</script>
+<script>
+(() => {
+  const app = document.getElementById("app");
+  const endpoint = "/v0/management/plugins/opencode-go-cliproxyapi/config";
+  function auth() {
+    const raw = localStorage.getItem("cli-proxy-auth");
+    if (!raw) return "";
+    try {
+      let decoded = raw;
+      if (raw.startsWith("enc::v1::")) {
+        const bytes = Uint8Array.from(atob(raw.slice(9)), char => char.charCodeAt(0));
+        const seed = new TextEncoder().encode("cli-proxy-api-webui::secure-storage|" + location.host + "|" + navigator.userAgent);
+        for (let i = 0; i < bytes.length; i++) bytes[i] ^= seed[i % seed.length];
+        decoded = new TextDecoder().decode(bytes);
+      }
+      const parsed = JSON.parse(decoded);
+      if (parsed && parsed.state && parsed.state.managementKey) return typeof parsed.state.managementKey === "string" ? parsed.state.managementKey : "";
+      return "";
+    } catch (_) { return ""; }
+  }
+  function request(method, body) {
+    const headers = {"Content-Type": "application/json"};
+    const key = auth();
+    if (key) headers.Authorization = "Bearer " + key;
+    const opts = {method, headers};
+    if (body !== undefined) opts.body = JSON.stringify(body);
+    return fetch(endpoint, opts).then(async response => {
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || data.message || "Request failed");
+      return data;
+    });
+  }
+  function mask(value) {
+    const text = String(value || "");
+    if (text.length <= 8) return "••••";
+    return text.slice(0, 4) + "…" + text.slice(-4);
+  }
+  function normalizeKeys(raw) {
+    if (!Array.isArray(raw)) return [];
+    const out = [];
+    raw.forEach(item => {
+      if (typeof item === "string" && item.trim()) out.push({value: item.trim()});
+      else if (item && typeof item === "object" && typeof item.value === "string" && item.value.trim()) out.push({value: item.value.trim()});
+    });
+    return out;
+  }
+  function render(keys, statusText, statusClass) {
+    app.textContent = "";
+    const card = document.createElement("section");
+    card.className = "keys-card";
+    const form = document.createElement("form");
+    form.className = "keys-form";
+    form.setAttribute("autocomplete", "off");
+    const input = document.createElement("input");
+    input.className = "keys-input";
+    input.type = "password";
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("spellcheck", "false");
+    input.setAttribute("aria-label", "OpenCode Go API key");
+    input.placeholder = "Paste OpenCode Go API key";
+    const add = document.createElement("button");
+    add.className = "keys-add";
+    add.type = "submit";
+    add.textContent = "Add key";
+    form.append(input, add);
+    const status = document.createElement("p");
+    status.className = "keys-status " + (statusClass || "keys-muted");
+    status.setAttribute("role", "status");
+    status.textContent = statusText || "";
+    const list = document.createElement("ul");
+    list.className = "keys-list";
+    if (!keys.length) {
+      const empty = document.createElement("p");
+      empty.className = "keys-muted";
+      empty.setAttribute("role", "status");
+      empty.textContent = "No configured credentials.";
+      card.append(form, status, empty);
+    } else {
+      keys.forEach((entry, index) => {
+        const item = document.createElement("li");
+        item.className = "keys-item";
+        const label = document.createElement("span");
+        label.className = "keys-mask";
+        label.textContent = mask(entry.value);
+        const remove = document.createElement("button");
+        remove.className = "keys-remove";
+        remove.type = "button";
+        remove.textContent = "Remove";
+        remove.setAttribute("aria-label", "Remove " + mask(entry.value));
+        remove.onclick = () => {
+          if (!window.confirm("Remove this OpenCode Go key from the hub pool?")) return;
+          const next = keys.filter((_, i) => i !== index);
+          add.disabled = true;
+          remove.disabled = true;
+          request("PATCH", {"api-keys": next}).then(() => load("Removed.")).catch(err => {
+            add.disabled = false;
+            render(keys, err.message || "Remove failed", "keys-error");
+          });
+        };
+        item.append(label, remove);
+        list.appendChild(item);
+      });
+      card.append(form, status, list);
+    }
+    form.onsubmit = event => {
+      event.preventDefault();
+      const value = input.value.trim();
+      if (!value) {
+        status.className = "keys-status keys-error";
+        status.textContent = "Paste a key first.";
+        return;
+      }
+      if (keys.some(entry => entry.value === value)) {
+        status.className = "keys-status keys-error";
+        status.textContent = "That key is already in the pool.";
+        return;
+      }
+      add.disabled = true;
+      request("PATCH", {"api-keys": keys.concat([{value}])}).then(() => {
+        input.value = "";
+        load("Key added. Catalog refresh runs on reconfigure.");
+      }).catch(err => {
+        add.disabled = false;
+        status.className = "keys-status keys-error";
+        status.textContent = err.message || "Add failed";
+      });
+    };
+    app.appendChild(card);
+    input.focus();
+  }
+  function load(statusText) {
+    request("GET").then(config => {
+      render(normalizeKeys(config["api-keys"]), statusText, "keys-muted");
+    }).catch(err => {
+      app.textContent = "";
+      const p = document.createElement("p");
+      p.className = "keys-error";
+      p.setAttribute("role", "status");
+      p.textContent = err.message || "Unable to load keys.";
+      app.appendChild(p);
+    });
+  }
+  if (!auth()) {
+    app.textContent = "";
+    const p = document.createElement("p");
+    p.className = "keys-error";
+    p.setAttribute("role", "status");
+    p.textContent = "Enable Remember password in Management Center to use this page.";
+    app.appendChild(p);
+    return;
+  }
+  load("");
+})();
+</script>
+</body>
+</html>

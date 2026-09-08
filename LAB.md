@@ -2,57 +2,83 @@
 
 This Datahazed fork of
 [router-for-me/Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center)
-adds **OpenCode Go** as a sixth native Usage provider. Upstream closed
-that as "not our provider"; the official path is a plugin page. The lab
-wants Go on the same Usage board as Claude / Codex / Grok.
+is the dedicated CLI Proxy panel project.
 
-`origin/main` tracks upstream. Overlay work lives on
-`lab-opencode-go-quota`. Do not merge the overlay into `main` — that
-makes the next upstream rebase painful.
+Mini checkout: `~/projects/cli-proxy-management-center`
 
-## What the overlay does
+- `origin` = this fork
+- `upstream` = router-for-me CPAMC
+- `main` tracks upstream (fast-forward only)
+- `lab-opencode-go-quota` carries the OpenCode Go Usage adapter **and**
+  the `lab/` tooling directory
 
-- Auth files with `type: opencode-go` (or `opencode`) appear on
-  **Usage** (`#/quota`) with the same card chrome as the other
-  providers: 5-hour, weekly, and monthly meters.
-- Quota is fetched from the lab plugin, not from CPA's native quota
-  API: `POST /v0/management/plugins/opencode-go-cliproxyapi/quota`
-  with `{ "key_id": "<auth file id>" }`.
-- Plugin percent is *used*. The card shows remaining as `100 - percent`.
-  `rate-limited` is treated as 100% used.
+Do not merge the overlay into `main`. Rebase the lab branch onto `main`
+when upstream moves.
 
-The built single-file panel is **not** committed here (`dist/` is
-gitignored). `Datahazed/lab-proxy` pins a SHA of this branch and
-bind-mounts the built `management.html` over the CLI Proxy image asset.
+## What lives where
+
+| Path | What |
+|---|---|
+| `src/features/quota/providers/opencodeGo/` | Native Usage adapter (same cards as Claude/Codex/Grok) |
+| `lab/` | Scripts, built `management.html`, lab-patched OpenCode Go plugin |
+| `~/proxy` (`Datahazed/lab-proxy`) | Caddy + cliproxy container. Bind-mounts `lab/management.html`. |
+
+`lab/dist` is not a thing. Root `dist/` is gitignored (vite output).
+The artefact we keep is `lab/management.html`.
+
+## Rebuild the panel
+
+On the Mini:
+
+```text
+cd ~/projects/cli-proxy-management-center
+./lab/scripts/rebuild-panel.sh
+cd ~/proxy && docker compose up -d cliproxy
+```
+
+Compose mounts
+
+`/Users/pmcd/projects/cli-proxy-management-center/lab/management.html`
+
+over `/CLIProxyAPI/static/management.html`. Keep
+`remote-management.disable-auto-update-panel: true` in the gitignored
+runtime config so CPA does not download upstream CPAMC over it.
+
+## OpenCode Go plugin
+
+Sources: `lab/plugin/` (Keys page + empty-key register, from
+massiveits/opencode-go-cliproxyapi). Build and install:
+
+```text
+./lab/scripts/build-plugin.sh
+./lab/scripts/install-plugin.sh
+cd ~/proxy && docker compose up -d cliproxy
+```
+
+That writes the `.so` into `~/proxy/data/cliproxy/plugins/` (gitignored).
+Do not commit API keys.
 
 ## Rebase when upstream moves
 
 ```text
-git fetch upstream
-git checkout main
-git merge --ff-only upstream/main
-git push origin main
-git checkout lab-opencode-go-quota
-git rebase main
+./lab/scripts/rebase-upstream.sh
 # fix conflicts (usually src/features/quota/* and i18n)
-bun test
-bun run type-check
-bun run build
+bun test && bun run type-check
 git push --force-with-lease origin lab-opencode-go-quota
+./lab/scripts/rebuild-panel.sh
+cd ~/proxy && docker compose up -d cliproxy
 ```
-
-Then in `lab-proxy`, run `scripts/rebuild-cliproxy-panel.sh` and commit
-the new `config/cliproxy/management.html`.
 
 ## Bump CLI Proxy without a panel rebase
 
-Pin a new `eceasy/cli-proxy-api` digest in `lab-proxy/compose.yml`.
-Keep `remote-management.disable-auto-update-panel: true` so the image
-does not download upstream CPAMC over the overlay. Recreate `cliproxy`
-only. If the management API changed, rebase this branch first.
+Pin a new `eceasy/cli-proxy-api` digest in `~/proxy/compose.yml` and
+`lab/pin.json`. Keep the overlay mount and auto-update disabled.
+`docker compose up -d cliproxy` only. If the management API moved,
+rebase this branch first.
 
 ## Do not
 
 - Open a Usage-provider PR against upstream CPAMC (already rejected).
 - Turn panel auto-update back on in the live CLI Proxy config.
-- Commit `dist/` or OpenCode Go API keys here.
+- Commit `dist/`, `lab/plugin/dist/`, or OpenCode Go API keys.
+- Merge `lab-opencode-go-quota` into `main`.
