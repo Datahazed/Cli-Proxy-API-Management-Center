@@ -1,3 +1,6 @@
+> **Datahazed lab fork.** Day-to-day, remotes, rebuild, rebase: **[LAB.md](LAB.md)**.
+> Working branch: `lab-opencode-go-quota`. `main` tracks upstream — do not merge the overlay into `main`.
+
 # CLI Proxy API Management Center
 
 A single-file Web UI (React + TypeScript) for operating and troubleshooting the **CLI Proxy API** via its **Management API** (config, credentials, and logs).
