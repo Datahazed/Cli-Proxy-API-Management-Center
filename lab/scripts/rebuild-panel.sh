@@ -6,7 +6,7 @@
 #   ./lab/scripts/rebuild-panel.sh
 set -eu
 root=$(CDPATH= cd -- "$(dirname "$0")/../.." && pwd)
-out="$root/lab/management.html"
+out="$root/lab/panel/management.html"
 pin="$root/lab/pin.json"
 image='oven/bun:1.3.14'
 
@@ -22,7 +22,25 @@ bun run build
 test -f dist/index.html
 '
 
-cp "$root/dist/index.html" "$out"
+python3 - "$root/dist/index.html" "$out" "$root/lab/management.html" <<'COPY'
+import pathlib, shutil, sys
+src, panel, alias = map(pathlib.Path, sys.argv[1:4])
+data = src.read_bytes()
+panel.parent.mkdir(parents=True, exist_ok=True)
+# Truncate in place when the file already exists so a directory bind keeps working.
+if panel.exists():
+    with panel.open('wb') as f:
+        f.write(data)
+        f.truncate()
+else:
+    panel.write_bytes(data)
+if alias.exists():
+    with alias.open('wb') as f:
+        f.write(data)
+        f.truncate()
+else:
+    alias.write_bytes(data)
+COPY
 sha=$(git -C "$root" rev-parse HEAD)
 branch=$(git -C "$root" rev-parse --abbrev-ref HEAD)
 upstream=$(git -C "$root" merge-base HEAD origin/main 2>/dev/null || true)
@@ -41,4 +59,5 @@ path.write_text(json.dumps(data, indent=2) + "\n")
 PY
 
 echo "Wrote $out from $root@$sha"
-echo "Recreate cliproxy: cd ~/proxy && docker compose up -d cliproxy"
+echo "Panel is directory-mounted; recreate only if the mount is missing:"
+echo "  cd ~/proxy && docker compose up -d cliproxy"

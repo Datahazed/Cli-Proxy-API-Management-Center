@@ -62,7 +62,7 @@ Cloud OAuth / OpenCode Go keys
         ▼
 eceasy/cli-proxy-api  (digest-pinned in lab-proxy compose.yml)
         │
-        ├── /management.html  ← bind-mount of lab/management.html (this repo)
+        ├── /management.html  ← bind-mount of lab/panel/management.html (this repo)
         └── plugins/*.so      ← built from lab/plugin, installed into
                                 ~/proxy/data/cliproxy/plugins (gitignored)
         │
@@ -96,14 +96,14 @@ Usage). Then:
 ```text
 cd ~/projects/cli-proxy-management-center
 ./lab/scripts/rebuild-panel.sh
-git add lab/management.html lab/pin.json
+git add lab/panel/management.html lab/pin.json
 git commit -m "Rebuild lab panel"
 git push origin lab-opencode-go-quota
 cd ~/proxy && docker compose up -d cliproxy
 ```
 
 `rebuild-panel.sh` runs tests, type-check, and vite, then writes
-`lab/management.html`. Compose already bind-mounts that file over
+`lab/panel/management.html`. Compose already bind-mounts that file over
 `/CLIProxyAPI/static/management.html`. Keep
 `remote-management.disable-auto-update-panel: true` in the gitignored
 runtime config so CPA does not download upstream CPAMC over it.
@@ -136,7 +136,7 @@ cd ~/projects/cli-proxy-management-center
 # fix conflicts if any (usually src/features/quota/* and i18n)
 git push --force-with-lease origin lab-opencode-go-quota
 ./lab/scripts/rebuild-panel.sh
-git add lab/management.html lab/pin.json
+git add lab/panel/management.html lab/pin.json
 git commit -m "Rebuild lab panel after upstream rebase"
 git push origin lab-opencode-go-quota
 cd ~/proxy && docker compose up -d cliproxy
@@ -167,7 +167,7 @@ cd ~/projects/cli-proxy-management-center
 git remote add upstream https://github.com/router-for-me/Cli-Proxy-API-Management-Center.git
 git fetch upstream
 git branch --track main origin/main
-# lab-proxy compose already bind-mounts lab/management.html
+# lab-proxy compose already bind-mounts lab/panel/management.html
 cd ~/proxy && docker compose up -d cliproxy
 ```
 
@@ -176,9 +176,9 @@ cd ~/proxy && docker compose up -d cliproxy
 | Path | What |
 |---|---|
 | `src/features/quota/providers/opencodeGo/` | Native Usage adapter (5-hour / weekly / monthly) |
-| `lab/management.html` | Built single-file panel (committed artefact) |
+| `lab/panel/management.html` | Built single-file panel (committed artefact) |
 | `lab/pin.json` | CPA image digest + this branch SHA |
-| `lab/scripts/rebuild-panel.sh` | test + type-check + build → `lab/management.html` |
+| `lab/scripts/rebuild-panel.sh` | test + type-check + build → `lab/panel/management.html` |
 | `lab/scripts/build-plugin.sh` | linux/arm64 `.so` into `lab/plugin/dist/` (gitignored) |
 | `lab/scripts/install-plugin.sh` | copy `.so` into Mini cliproxy data dir |
 | `lab/scripts/rebase-upstream.sh` | ff-only `main`, rebase this branch |
@@ -186,7 +186,7 @@ cd ~/proxy && docker compose up -d cliproxy
 | `~/proxy` | Caddy + cliproxy container. Not this repo. |
 
 Root `dist/` is gitignored (vite output). The artefact we keep is
-`lab/management.html`. Quota percent from the plugin is *used*; the
+`lab/panel/management.html`. Quota percent from the plugin is *used*; the
 card shows remaining as `100 - percent`. `rate-limited` is 100% used.
 
 ## Do not
