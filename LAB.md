@@ -28,6 +28,9 @@ track upstream.
 Do not merge `lab-opencode-go-quota` into `main`. Rebase it onto `main`
 when upstream moves.
 
+Reviewable PR (keep open, do not merge):
+https://github.com/Datahazed/Cli-Proxy-API-Management-Center/pull/1
+
 ```text
 git clone --branch lab-opencode-go-quota \
   git@github.com:Datahazed/Cli-Proxy-API-Management-Center.git \
