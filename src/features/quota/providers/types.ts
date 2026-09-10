@@ -11,6 +11,7 @@ import type {
   AuthFileItem,
   ClaudeQuotaState,
   CodexQuotaState,
+  DevinQuotaState,
   KimiQuotaState,
   OpencodeGoQuotaState,
   XaiQuotaState,
@@ -18,19 +19,22 @@ import type {
 
 export type QuotaUpdater<T> = T | ((prev: T) => T);
 
-export type QuotaProviderType = 'antigravity' | 'claude' | 'codex' | 'kimi' | 'opencode-go' | 'xai';
+export type QuotaProviderType =
+  'antigravity' | 'claude' | 'codex' | 'devin' | 'kimi' | 'opencode-go' | 'xai';
 
 /** useQuotaStore 的结构契约（storeSelector/storeSetter 依赖）。 */
 export interface QuotaStore {
   antigravityQuota: Record<string, AntigravityQuotaState>;
   claudeQuota: Record<string, ClaudeQuotaState>;
   codexQuota: Record<string, CodexQuotaState>;
+  devinQuota: Record<string, DevinQuotaState>;
   kimiQuota: Record<string, KimiQuotaState>;
   opencodeGoQuota: Record<string, OpencodeGoQuotaState>;
   xaiQuota: Record<string, XaiQuotaState>;
   setAntigravityQuota: (updater: QuotaUpdater<Record<string, AntigravityQuotaState>>) => void;
   setClaudeQuota: (updater: QuotaUpdater<Record<string, ClaudeQuotaState>>) => void;
   setCodexQuota: (updater: QuotaUpdater<Record<string, CodexQuotaState>>) => void;
+  setDevinQuota: (updater: QuotaUpdater<Record<string, DevinQuotaState>>) => void;
   setKimiQuota: (updater: QuotaUpdater<Record<string, KimiQuotaState>>) => void;
   setOpencodeGoQuota: (updater: QuotaUpdater<Record<string, OpencodeGoQuotaState>>) => void;
   setXaiQuota: (updater: QuotaUpdater<Record<string, XaiQuotaState>>) => void;

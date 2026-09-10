@@ -296,6 +296,7 @@
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
     "filter_opencode-go": "OpenCode Go",
+    "filter_devin": "Devin",
     "filter_opencode": "OpenCode Go",
     "filter_iflow": "iFlow",
     "filter_vertex": "Vertex",
@@ -490,6 +491,21 @@
     "limit_window": "{{duration}} 限额",
     "limit_index": "限额 #{{index}}",
     "reset_hint": "{{hint}} 后重置"
+  },
+  "devin_quota": {
+    "title": "Devin 配额",
+    "empty_title": "没有 Devin 凭证",
+    "empty_desc": "在 Mini 上运行 `devin auth login` 后，即可在此查看每日和每周配额。",
+    "idle": "点击刷新配额",
+    "loading": "正在加载配额...",
+    "load_failed": "加载配额失败：{{message}}",
+    "not_logged_in": "Mini 上的 Devin CLI 未登录。请运行 `devin auth login`。",
+    "empty_data": "暂无配额数据",
+    "refresh_button": "刷新配额",
+    "window_daily": "每日",
+    "window_weekly": "每周",
+    "plan": "套餐：{{plan}}",
+    "extra_balance": "额外用量余额：${{amount}}"
   },
   "opencode_go_quota": {
     "title": "OpenCode Go 配额",

@@ -466,7 +466,7 @@ export function buildTimelineLane(input: TimelineLaneInput): TimelineLane {
     };
   }
 
-  if (provider === 'opencode-go') {
+  if (provider === 'opencode-go' || provider === 'devin') {
     const windows = ((quota as { windows?: WindowLike[] }).windows ?? []).filter(
       (window) => typeof window.resetAtMs === 'number'
     );

@@ -414,3 +414,22 @@ export interface OpencodeGoQuotaState {
   error?: string;
   errorStatus?: number;
 }
+
+export interface DevinQuotaWindow {
+  id: string;
+  labelKey?: string;
+  usedPercent: number | null;
+  resetAtMs?: number | null;
+  /** 24 for daily, 168 for weekly. Devin has no 5-hour window. */
+  periodHours?: number | null;
+  status?: string;
+}
+
+export interface DevinQuotaState {
+  status: 'idle' | 'loading' | 'success' | 'error';
+  windows: DevinQuotaWindow[];
+  plan: string | null;
+  extraUsageBalanceUsd: number | null;
+  error?: string;
+  errorStatus?: number;
+}

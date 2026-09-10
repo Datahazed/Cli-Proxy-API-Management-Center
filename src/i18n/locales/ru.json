@@ -295,6 +295,7 @@
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
     "filter_opencode-go": "OpenCode Go",
+    "filter_devin": "Devin",
     "filter_opencode": "OpenCode Go",
     "filter_iflow": "iFlow",
     "filter_vertex": "Vertex",
@@ -489,6 +490,21 @@
     "limit_window": "Лимит {{duration}}",
     "limit_index": "Лимит #{{index}}",
     "reset_hint": "сброс через {{hint}}"
+  },
+  "devin_quota": {
+    "title": "Квота Devin",
+    "empty_title": "Нет учётных данных Devin",
+    "empty_desc": "Выполните `devin auth login` на Mini; дневная и недельная квота появится здесь.",
+    "idle": "Нажмите, чтобы обновить квоту",
+    "loading": "Загрузка квоты...",
+    "load_failed": "Не удалось загрузить квоту: {{message}}",
+    "not_logged_in": "Devin CLI не авторизован на Mini. Выполните `devin auth login`.",
+    "empty_data": "Нет данных о квоте",
+    "refresh_button": "Обновить квоту",
+    "window_daily": "День",
+    "window_weekly": "Неделя",
+    "plan": "План: {{plan}}",
+    "extra_balance": "Доп. баланс: ${{amount}}"
   },
   "opencode_go_quota": {
     "title": "Квота OpenCode Go",

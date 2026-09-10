@@ -296,6 +296,7 @@
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
     "filter_opencode-go": "OpenCode Go",
+    "filter_devin": "Devin",
     "filter_opencode": "OpenCode Go",
     "filter_iflow": "iFlow",
     "filter_vertex": "Vertex",
@@ -490,6 +491,21 @@
     "limit_window": "{{duration}} limit",
     "limit_index": "Limit #{{index}}",
     "reset_hint": "resets in {{hint}}"
+  },
+  "devin_quota": {
+    "title": "Devin Quota",
+    "empty_title": "No Devin credential",
+    "empty_desc": "Run `devin auth login` on the Mini; the daily and weekly plan quota then shows here.",
+    "idle": "Click to refresh quota",
+    "loading": "Loading quota...",
+    "load_failed": "Failed to load quota: {{message}}",
+    "not_logged_in": "Devin CLI is not logged in on the Mini. Run `devin auth login`.",
+    "empty_data": "No quota data available",
+    "refresh_button": "Refresh Quota",
+    "window_daily": "Daily",
+    "window_weekly": "Weekly",
+    "plan": "Plan: {{plan}}",
+    "extra_balance": "Extra usage: ${{amount}}"
   },
   "opencode_go_quota": {
     "title": "OpenCode Go Quota",

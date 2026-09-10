@@ -46,6 +46,10 @@ export const TYPE_COLORS: Record<string, TypeColorSet> = {
     light: { bg: '#e8f5e9', text: '#1b5e20' },
     dark: { bg: '#1b5e20', text: '#a5d6a7' },
   },
+  devin: {
+    light: { bg: '#e0f2ff', text: '#0b4f9c' },
+    dark: { bg: '#0b3d78', text: '#8ec5ff' },
+  },
   iflow: {
     light: { bg: '#f5e3fc', text: '#9025c8' },
     dark: { bg: '#521490', text: '#d49cf5' },

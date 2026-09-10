@@ -58,6 +58,7 @@ describe('buildTabCounts', () => {
       xai: 1,
       kimi: 1,
       'opencode-go': 0,
+      devin: 0,
     });
   });
 });

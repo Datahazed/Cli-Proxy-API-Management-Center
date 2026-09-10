@@ -129,7 +129,7 @@ export function collectQuotaRowInstants(
     return collectRows((quota as { rows?: WindowLike[] }).rows ?? [], 'row');
   }
 
-  if (provider === 'opencode-go') {
+  if (provider === 'opencode-go' || provider === 'devin') {
     return collectRows((quota as { windows?: WindowLike[] }).windows ?? [], 'window');
   }
 

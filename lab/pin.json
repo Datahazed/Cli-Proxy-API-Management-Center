@@ -2,7 +2,7 @@
   "cpa_image": "eceasy/cli-proxy-api:v7.2.154@sha256:e93870454b282f260cd1587bcfb6a11c638915903647a1175f9b0915a865f66d",
   "cpamc_fork": "https://github.com/Datahazed/Cli-Proxy-API-Management-Center",
   "cpamc_branch": "lab-opencode-go-quota",
-  "cpamc_sha": "49891d7bc33ad804624bfe01f7a1accfa3dc3d77",
+  "cpamc_sha": "bcdd541471f31ddc5e186d8b35624d205e40e9fb",
   "upstream_repo": "https://github.com/router-for-me/Cli-Proxy-API-Management-Center",
   "upstream_sha": "ed5f1c48e11ba7335f1e8f676f228c280196af85",
   "panel": "lab/panel/management.html",

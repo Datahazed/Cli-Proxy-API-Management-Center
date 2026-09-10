@@ -24,13 +24,15 @@ export type AuthFileModelItem = {
 };
 export type AuthFileIconAsset = string | { light: string; dark: string };
 
-export type QuotaProviderType = 'antigravity' | 'claude' | 'codex' | 'kimi' | 'opencode-go' | 'xai';
+export type QuotaProviderType =
+  'antigravity' | 'claude' | 'codex' | 'devin' | 'kimi' | 'opencode-go' | 'xai';
 export type OAuthConfigLoadError = 'loading' | 'unsupported' | 'load' | null;
 
 export const QUOTA_PROVIDER_TYPES = new Set<QuotaProviderType>([
   'antigravity',
   'claude',
   'codex',
+  'devin',
   'kimi',
   'opencode-go',
   'xai',

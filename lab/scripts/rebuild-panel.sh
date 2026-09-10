@@ -16,7 +16,7 @@ docker run --rm --platform linux/arm64 \
   "$image" \
   bash -lc 'set -euo pipefail
 bun install --frozen-lockfile
-bun test tests/opencodeGoQuota.test.ts tests/quotaPageLogic.test.ts tests/quotaResetSchedule.test.ts tests/quotaTimeline.test.ts
+bun test tests/opencodeGoQuota.test.ts tests/devinQuota.test.ts tests/quotaPageLogic.test.ts tests/quotaResetSchedule.test.ts tests/quotaTimeline.test.ts
 bun run type-check
 bun run build
 test -f dist/index.html
