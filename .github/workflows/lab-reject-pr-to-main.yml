@@ -5,9 +5,16 @@ on:
   pull_request:
     branches: [main]
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   reject:
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
       - name: Explain
         run: |

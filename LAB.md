@@ -36,7 +36,8 @@ GitHub enforces that:
 - `.github/workflows/lab-reject-pr-to-main.yml` fails any PR that
   targets `main`.
 - `.github/workflows/lab-sync-upstream-main.yml` resets `main` to
-  `upstream/main` daily, on push, and via workflow_dispatch.
+  `upstream/main` daily and via workflow_dispatch. A push from the sync
+  deploy key does not schedule another redundant sync.
 
 PR #1 was merged into `main` by accident and then undone. The ruleset
 is there so that cannot stick again.
